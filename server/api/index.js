@@ -17,16 +17,13 @@ route.post("/", (req, res) => {
 })
 
 route.get('/update/time/:id', async (req, res) => {
-    console.log('Update time calleds');
+
     const { id } = req.params;
 
-    console.log(id);
     const clockinTime = moment().format('YYYY-MM-DD HH:mm');
-    console.log(clockinTime);
     let updated = await mongoose.connection.db
         .collection('user')
         .updateOne({ id: id }, { $set: { clockinTime, status: true } });
-    console.log(updated);
     res.redirect('/');
 });
 
@@ -137,7 +134,6 @@ route.post('/site/user/fetch', async (req, res, next) => {
             message: 'User fetched successfully',
         });
     } catch (error) {
-        console.log(error);
         return res.json({
             success: false,
             status: 500,
@@ -154,9 +150,6 @@ route.get('/site/user/report/:id', async (req, res, next) => {
         if (dtime <= '05:00:00') {
             date = moment(date).subtract(1, 'days').format('YYYY-MM-DD');
         }
-        console.log(date);
-        console.log(id);
-        console.log(dtime);
         let user = await mongoose.connection.db
             .collection('user')
             .aggregate([
@@ -204,8 +197,6 @@ route.get('/site/user/report/:id', async (req, res, next) => {
                 },
             ])
             .toArray();
-
-        console.log(user);
         return res.json({
             success: true,
             status: 200,
